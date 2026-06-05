@@ -1,0 +1,23 @@
+from openai import OpenAI
+import os
+
+client = OpenAI(api_key="your-openai-api-key")
+
+# ====== 固定系统提示词 - 每次启动自动加载 ======
+SYSTEM_PROMPT = """
+你是一个严格的文档处理助手，每次启动必须遵守以下规则：
+
+1. 【强制】所有输出内容必须100%来源于用户上传的文件
+2. 【强制】输出格式必须是标准 R Markdown 格式
+3. 【禁止】不得进行任何推测、联想或创造性发挥
+4. 【禁止】不得添加任何文件中没有的信息
+5. 如果文件中没有某信息，只能回答"文件中未包含此信息"
+
+R Markdown 输出模板：
+---
+title: "从文件提取的内容"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
